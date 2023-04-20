@@ -39,18 +39,21 @@
 			this.getNavData()
 			this.getNewsData()
 		},
+		// 触底
 		onReachBottom() {
 			console.log('到底啦！')
-			if(this.loading == 2) return
+			if(this.loading === 2) return
 			this.currentPage++
 			this.loading = 1
-			this.getNewsData()
+			// console.log(this.navArr[this.navIndex])
+			this.getNewsData(this.navArr[this.navIndex].id)
+			
 		},
 		methods: {
 			// 导航切换
-			clickNav(index, id) {
+			clickNav(index, id) {				
 				this.navIndex = index
-				// console.log(id)
+				console.log(id)
 				this.currentPage = 1
 				this.newsArr = []
 				this.loading = 0
@@ -76,7 +79,7 @@
 			},
 
 			// 获取新闻列表数据
-			getNewsData(id = 50) {
+			getNewsData(id) {
 				uni.request({
 					url: "https://ku.qingnian8.com/dataApi/news/newslist.php",
 					data: {
@@ -85,7 +88,9 @@
 					},
 					success: res => {
 						console.log(res)
-						if(res.data.length === 0) this.loading = 2
+						if(res.data.length === 0) {
+							this.loading = 2
+						}
 						this.newsArr = [...this.newsArr, ...res.data]
 					}
 				})
